@@ -4,7 +4,7 @@ var gulp = require('gulp'),
     buffer = require('vinyl-buffer'),
     uglify = require('gulp-uglify');
 
-gulp.task('develop', function()
+function develop()
 {
   return browserify(
   {
@@ -16,9 +16,9 @@ gulp.task('develop', function()
   .pipe(source('tv.js'))
   .pipe(buffer())
   .pipe(gulp.dest('./bin'));
-});
+}
 
-gulp.task('min', function() // release
+function min()
 {
   return browserify(
   {
@@ -31,10 +31,14 @@ gulp.task('min', function() // release
   .pipe(buffer())
   .pipe(uglify())
   .pipe(gulp.dest('./bin'));
-});
+}
+
+gulp.task('develop', develop);
+
+gulp.task('min', min);
 
 gulp.task('dev', function() {
-  gulp.watch('./src/**', ['develop']);
+  gulp.watch('./src/**', gulp.series('develop', develop));
 });
 
-gulp.task('default', ['dev']);
+// gulp.task('default', ['dev']);
